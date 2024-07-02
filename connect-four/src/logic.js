@@ -1,6 +1,6 @@
 function setup(allPlayerIds) {
   const game = {
-    cells: new Array(9).fill(null),
+    cells: new Array(48).fill(null),
     winCombo: null,
     lastMovePlayerId: null,
     playerIds: allPlayerIds,
