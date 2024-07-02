@@ -40,29 +40,80 @@ function claimCell(cellIndex, { game, playerId }) {
 }
 
 function findWinningCombo(cells) {
-  // const columns = 8;
-  // const rows = 6;
+  const columns = 7;
+  const rows = 6;
 
-  // for (let row = 0; row < rows; row++) {
-  //   for (let col = 0; col <= columns - 4; col++) {
-      
-  //   }
+  // horizontal wins
+  for (let row = 0; row < rows; row++) {
+    for (let col = 0; col <= columns - 4; col++) {
+      const start = row * columns + col;
+      if (
+        cells[start] &&
+        cells[start] === cells[start + 1] &&
+        cells[start] === cells[start + 2] &&
+        cells[start] === cells[start + 3]
+      ){
+        return [start, start + 1, start + 2, start + 3];
+      }   
+    }
+  }
 
+  // check for vertical wins
+  for (let col = 0; col < columns; col++) {
+    for (let row = 0; row <= rows - 4; row++) {
+      const start = row * columns + col;
+      if (
+        cells[start] &&
+        cells[start] === cells[start + columns] &&
+        cells[start] === cells[start + 2 * columns] &&
+        cells[start] === cells[start + 3 * columns]
+      ) {
+        return [start, start + columns, start + 2 * columns, start + 3 * columns];
+      }
+    }
+  }
 
-  return (
-    [
-      [0, 1, 2],
-      [3, 4, 5],
-      [6, 7, 8],
-      [0, 3, 6],
-      [1, 4, 7],
-      [2, 5, 8],
-      [0, 4, 8],
-      [2, 4, 6],
-    ].find((combo) =>
-      combo.every((i) => cells[i] && cells[i] === cells[combo[0]])
-    ) || null
-  )
+  // check for diagonal wins
+  for (let row = 0; row <= rows - 4; row++) {
+    for (let col = 0; col <= columns - 4; col++) {
+      const start = row * columns + col;
+      if (
+        cells[start] &&
+        cells[start] === cells[start + columns + 1] &&
+        cells[start] === cells[start + 2 * (columns + 1)] &&
+        cells[start] === cells[start + 3 * (columns + 1)]
+      ) {
+        return [
+          start,
+          start + columns + 1,
+          start + 2 * (columns + 1),
+          start + 3 * (columns + 1),
+        ];
+      }
+    }
+  }
+
+  // Check for diagonal wins (bottom-left to top-right)
+  for (let row = 3; row < rows; row++) {
+    for (let col = 0; col <= columns - 4; col++) {
+      const start = row * columns + col;
+      if (
+        cells[start] &&
+        cells[start] === cells[start - columns + 1] &&
+        cells[start] === cells[start - 2 * (columns - 1)] &&
+        cells[start] === cells[start - 3 * (columns - 1)]
+      ) {
+        return [
+          start,
+          start - columns + 1,
+          start - 2 * (columns - 1),
+          start - 3 * (columns - 1),
+        ];
+      }
+    }
+  }
+
+  return null;
 }
 
 Dusk.initLogic({
@@ -70,4 +121,4 @@ Dusk.initLogic({
   maxPlayers: 2,
   setup,
   actions: { claimCell },
-})
+});
