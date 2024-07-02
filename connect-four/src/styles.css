@@ -19,7 +19,7 @@ main {
 
 #board {
   display: grid;
-  grid-template-columns: repeat(8, 1fr);
+  grid-template-columns: repeat(7, 1fr);
   grid-template-rows: repeat(6, 1fr);
   gap: 2px;
   width: 90vmin;
@@ -97,7 +97,7 @@ button.cell:not([disabled]) {
 }
 
 @media (hover: hover) {
-  button.cell:not([disabled]):after {
+  /* button.cell:not([disabled]):after {
     content: "";
     display: block;
     position: absolute;
@@ -115,7 +115,7 @@ button.cell:not([disabled]) {
 
   button.cell:hover:after {
     scale: 1;
-  }
+  } */
 }
 
 ul {

@@ -10,7 +10,7 @@ let cellButtons, playerContainers, game
 
 function initUI(cells, playerIds, players, yourPlayerId) {
   // Add column buttons
-  for (let i = 0; i < 8; i++) {
+  for (let i = 0; i < 7; i++) {
     const button = document.createElement("button")
     button.innerText = "▼"
     button.addEventListener("click", () => dropPiece(i))
@@ -73,11 +73,11 @@ function onChange({ game: newGame, players, yourPlayerId, action }) {
 function dropPiece(column) {
   const columnCells = []
   for (let row = 5; row >= 0; row--) {
-    columnCells.push(game.cells[row * 8 + column])
+    columnCells.push(game.cells[row * 7 + column])
   }
   const emptyCellIndex = columnCells.indexOf(null)
   if (emptyCellIndex !== -1) {
-    const cellIndex = (5 - emptyCellIndex) * 8 + column
+    const cellIndex = (5 - emptyCellIndex) * 7 + column
     Dusk.actions.claimCell(cellIndex)
   }
 }

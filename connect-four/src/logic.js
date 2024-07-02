@@ -1,6 +1,6 @@
 function setup(allPlayerIds) {
   const game = {
-    cells: new Array(48).fill(null),
+    cells: new Array(42).fill(null), // 7 columns * 7 rows = 48 cells
     winCombo: null,
     lastMovePlayerId: null,
     playerIds: allPlayerIds,
@@ -40,6 +40,15 @@ function claimCell(cellIndex, { game, playerId }) {
 }
 
 function findWinningCombo(cells) {
+  // const columns = 8;
+  // const rows = 6;
+
+  // for (let row = 0; row < rows; row++) {
+  //   for (let col = 0; col <= columns - 4; col++) {
+      
+  //   }
+
+
   return (
     [
       [0, 1, 2],
