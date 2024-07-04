@@ -10,13 +10,29 @@ function setup(allPlayerIds) {
 }
 
 function claimCell(cellIndex, { game, playerId }) {
-  if (game.cells[cellIndex] !== null || playerId === game.lastMovePlayerId) {
-    throw Dusk.invalidAction()
+  const columns = 7;
+  const rows = 6;
+  const col = cellIndex % columns;
+
+  // Find the lowest available cell in the selected column
+  let targetIndex = -1;
+  for (let row = rows - 1; row >= 0; row--) {
+    const index = row * columns + col;
+    if (game.cells[index] === null) {
+      targetIndex = index;
+      break;
+    }
   }
 
-  game.cells[cellIndex] = playerId
-  game.lastMovePlayerId = playerId
-  game.winCombo = findWinningCombo(game.cells)
+  // If the column is full or the player is trying to move twice in a row, throw an invalid action error
+  if (targetIndex === -1 || playerId === game.lastMovePlayerId) {
+    throw Dusk.invalidAction();
+  }
+
+  // Claim the lowest available cell
+  game.cells[targetIndex] = playerId;
+  game.lastMovePlayerId = playerId;
+  game.winCombo = findWinningCombo(game.cells);
 
   if (game.winCombo) {
     Dusk.gameOver({
@@ -24,10 +40,10 @@ function claimCell(cellIndex, { game, playerId }) {
         [game.lastMovePlayerId]: "WON",
         [game.playerIds.find((id) => id !== game.lastMovePlayerId)]: "LOST",
       },
-    })
+    });
   }
 
-  game.freeCells = game.cells.findIndex((cell) => cell === null) !== -1
+  game.freeCells = game.cells.findIndex((cell) => cell === null) !== -1;
 
   if (!game.freeCells) {
     Dusk.gameOver({
@@ -35,7 +51,7 @@ function claimCell(cellIndex, { game, playerId }) {
         [game.playerIds[0]]: "LOST",
         [game.playerIds[1]]: "LOST",
       },
-    })
+    });
   }
 }
 

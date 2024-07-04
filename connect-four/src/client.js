@@ -22,6 +22,7 @@ function initUI(cells, playerIds, players, yourPlayerId) {
     const button = document.createElement("button")
     button.classList.add("cell")
     button.setAttribute("data-cell-index", cellIndex)
+    button.addEventListener("click", () => handleCellClick(cellIndex))
     board.appendChild(button)
     return button
   })
@@ -68,6 +69,11 @@ function onChange({ game: newGame, players, yourPlayerId, action }) {
   })
 
   if (action && action.name === "claimCell") selectSound.play()
+}
+
+function handleCellClick(cellIndex) {
+  const column = cellIndex % 7
+  dropPiece(column)
 }
 
 function dropPiece(column) {
