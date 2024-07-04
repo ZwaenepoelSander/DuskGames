@@ -72,24 +72,44 @@ button.cell[dim="true"]:before {
   scale: 0.8;
 }
 
-@keyframes scale-in {
+@keyframes easeOutBounce {
   0% {
-    transform: scale(0);
+    transform: translateY(-40vh);
+  }
+
+  20% {
+    transform: translateY(-30px);
+  }
+
+  40% {
+    transform: translateY(15px);
+  }
+
+  60% {
+    transform: translateY(-15px);
+  }
+
+  80% {
+    transform: translateY(7px);
   }
 
   100% {
-    transform: scale(1);
+    transform: translateY(0);
   }
 }
 
 button.cell[player="0"]:before {
   background-image: url(./assets/x.svg);
-  animation: scale-in 0.2s ease-in-out;
+  animation: scale-in 0.2s ease-in-out, easeOutBounce 0.6s ease-out;
 }
 
 button.cell[player="1"]:before {
   background-image: url(./assets/o.svg);
-  animation: scale-in 0.2s ease-in-out;
+  animation: scale-in 0.2s ease-in-out, easeOutBounce 0.6s ease-out;
+}
+
+button.cell.bounce:before {
+  animation: easeOutBounce 0.6s ease-out;
 }
 
 button.cell:not([disabled]) {

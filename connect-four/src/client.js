@@ -77,15 +77,21 @@ function handleCellClick(cellIndex) {
 }
 
 function dropPiece(column) {
-  const columnCells = []
+  const columnCells = [];
   for (let row = 5; row >= 0; row--) {
-    columnCells.push(game.cells[row * 7 + column])
+    columnCells.push(game.cells[row * 7 + column]);
   }
-  const emptyCellIndex = columnCells.indexOf(null)
+  const emptyCellIndex = columnCells.indexOf(null);
   if (emptyCellIndex !== -1) {
-    const cellIndex = (5 - emptyCellIndex) * 7 + column
-    Dusk.actions.claimCell(cellIndex)
+    const cellIndex = (5 - emptyCellIndex) * 7 + column;
+    Dusk.actions.claimCell(cellIndex);
+
+    // Add the bounce animation class to the cell
+    const cellButton = cellButtons[cellIndex];
+    cellButton.classList.add("bounce");
+    setTimeout(() => cellButton.classList.remove("bounce"), 600); // Remove class after animation
   }
 }
+
 
 Dusk.initClient({ onChange })
