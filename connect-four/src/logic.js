@@ -54,7 +54,7 @@ function findWinningCombo(cells) {
         cells[start] === cells[start + 3]
       ){
         return [start, start + 1, start + 2, start + 3];
-      }   
+      }
     }
   }
 
