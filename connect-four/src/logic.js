@@ -1,12 +1,30 @@
 function setup(allPlayerIds) {
   const game = {
-    cells: new Array(42).fill(null), // 7 columns * 7 rows = 48 cells
+    cells: new Array(42).fill(null),
     winCombo: null,
     lastMovePlayerId: null,
     playerIds: allPlayerIds,
-  }
+    players: allPlayerIds.reduce((acc, playerId, index) => {
+      let avatarUrl;
+      if (index === 0) {
+        avatarUrl = "./assets/animal_svg/chicken.svg"; // Ensure Player 1 has chicken avatar
+      } else if (index === 1) {
+        avatarUrl = "./assets/animal_svg/chick.svg"; // Ensure Player 2 has chick avatar
+      } else {
+        // avatarUrl = getRandomAnimalUrl(); // For additional players, if any
+      }
 
-  return game
+      acc[playerId] = {
+        avatarUrl: avatarUrl,
+        displayName: `Player ${index + 1}`,
+        playerId: playerId,
+      };
+
+      return acc;
+    }, {}),
+  };
+
+  return game;
 }
 
 function claimCell(cellIndex, { game, playerId }) {
@@ -14,7 +32,6 @@ function claimCell(cellIndex, { game, playerId }) {
   const rows = 6;
   const col = cellIndex % columns;
 
-  // Find the lowest available cell in the selected column
   let targetIndex = -1;
   for (let row = rows - 1; row >= 0; row--) {
     const index = row * columns + col;
@@ -24,15 +41,21 @@ function claimCell(cellIndex, { game, playerId }) {
     }
   }
 
-  // If the column is full or the player is trying to move twice in a row, throw an invalid action error
   if (targetIndex === -1 || playerId === game.lastMovePlayerId) {
     throw Dusk.invalidAction();
   }
 
-  // Claim the lowest available cell
   game.cells[targetIndex] = playerId;
   game.lastMovePlayerId = playerId;
   game.winCombo = findWinningCombo(game.cells);
+
+  // const cellElement = document.querySelectorAll('.cell')[targetIndex];
+  // if (cellElement) {
+  //   const playerIndex = game.playerIds.indexOf(playerId);
+  //   const avatarUrl = game.players[playerId].avatarUrl;
+  //   cellElement.setAttribute('player', playerIndex);
+  //   cellElement.style.setProperty(`--player-${playerIndex}-avatar-url`, `url('${avatarUrl}')`);
+  // }
 
   if (game.winCombo) {
     Dusk.gameOver({
@@ -68,7 +91,7 @@ function findWinningCombo(cells) {
         cells[start] === cells[start + 1] &&
         cells[start] === cells[start + 2] &&
         cells[start] === cells[start + 3]
-      ){
+      ) {
         return [start, start + 1, start + 2, start + 3];
       }
     }
