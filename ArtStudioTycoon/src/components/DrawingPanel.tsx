@@ -1,15 +1,15 @@
+// DrawingPanel.tsx
 import React, { useRef, useEffect, useState } from "react";
 import "../styles/drawingPanel.scss";
 import Row from "./Row";
 import { exportComponentAsPNG } from "react-component-export-image";
-import sampleImage from "../assets/16x16/necklace_01c.png"; // Example image path
 
 interface DrawingPanelProps {
   width: number;
   height: number;
   selectedColor: string;
-  onSave: () => void; // Add onSave prop
-  imageColors: string[]; // Add imageColors prop
+  onSave: () => void;
+  imageColors: string[];
 }
 
 const DrawingPanel: React.FC<DrawingPanelProps> = ({ width, height, selectedColor, onSave, imageColors }) => {
@@ -17,37 +17,26 @@ const DrawingPanel: React.FC<DrawingPanelProps> = ({ width, height, selectedColo
   const [rows, setRows] = useState<JSX.Element[]>([]);
 
   useEffect(() => {
-    if (width === 16 && height === 16) {
+    if (width === 16 && height === 16 && imageColors.length > 0) {
       loadImagePixels();
     } else {
       createEmptyGrid();
     }
-  }, [width, height]);
+  }, [width, height, imageColors]);
 
   const loadImagePixels = () => {
-    const img = new Image();
-    img.src = sampleImage;
-    img.onload = () => {
-      const canvas = document.createElement("canvas");
-      canvas.width = img.width;
-      canvas.height = img.height;
-      const ctx = canvas.getContext("2d");
-      ctx?.drawImage(img, 0, 0);
-      const imageData = ctx?.getImageData(0, 0, img.width, img.height);
-      if (imageData) {
-        const colors: string[][] = [];
-        for (let y = 0; y < img.height; y++) {
-          const row: string[] = [];
-          for (let x = 0; x < img.width; x++) {
-            const index = (y * img.width + x) * 4;
-            const color = `rgba(${imageData.data[index]}, ${imageData.data[index + 1]}, ${imageData.data[index + 2]}, ${imageData.data[index + 3] / 255})`;
-            row.push(color);
-          }
-          colors.push(row);
-        }
-        setRows(colors.map((row, i) => <Row key={i} width={width} selectedColor={selectedColor} initialColors={row} />));
+    const colors = imageColors.slice(0, width * height);
+    const pixelRows: string[][] = [];
+
+    for (let y = 0; y < height; y++) {
+      const row: string[] = [];
+      for (let x = 0; x < width; x++) {
+        row.push(colors[y * width + x] || "rgba(0,0,0,0)");
       }
-    };
+      pixelRows.push(row);
+    }
+
+    setRows(pixelRows.map((row, i) => <Row key={i} width={width} selectedColor={selectedColor} initialColors={row} />));
   };
 
   const createEmptyGrid = () => {
