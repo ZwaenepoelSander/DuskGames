@@ -37,7 +37,14 @@ export default [
   prettier,
   {
     rules: {
-      "prettier/prettier": "warn",
+      "prettier/prettier": [
+        "error",
+        "warn",
+        {
+          "endOfLine": "auto"
+        }
+      ]
     },
+    
   },
 ]
