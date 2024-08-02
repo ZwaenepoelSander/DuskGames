@@ -5,15 +5,17 @@ import Pixel from "./Pixel";
 interface RowProps {
   width: number;
   selectedColor: string;
+  initialColors: string[]; // Add initialColors prop
 }
 
-const Row: React.FC<RowProps> = ({ width, selectedColor }) => {
-  const pixels = [];
-  for (let i = 0; i < width; i++) {
-    pixels.push(<Pixel key={i} selectedColor={selectedColor} />);
-  }
-
-  return <div className="row">{pixels}</div>;
+const Row: React.FC<RowProps> = ({ width, selectedColor, initialColors }) => {
+  return (
+    <div className="row">
+      {initialColors.map((color, i) => (
+        <Pixel key={i} selectedColor={selectedColor} initialColor={color} />
+      ))}
+    </div>
+  );
 };
 
 export default Row;

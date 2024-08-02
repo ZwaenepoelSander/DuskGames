@@ -1,7 +1,5 @@
 import { PlayerId } from "dusk-games-sdk/multiplayer";
 import { useEffect, useState } from "react";
-import PaintingGrid from "./components/PaintingGrid";
-import ColorPicker from "./components/ColorPicker";
 import MoneyDisplay from "./components/MoneyDisplay";
 import PaintButton from "./components/PaintButton";
 import Editor from "./components/Editor";
@@ -11,25 +9,10 @@ import { GameState } from "./logic";
 // Create an audio object for the select sound
 const selectSound = new Audio(selectSoundAudio);
 
-const colors = [
-  "#FF0000",
-  "#00FF00",
-  "#0000FF",
-  "#FFFF00",
-  "#FF00FF",
-  "#00FFFF",
-  "#000000",
-  "#FFFFFF",
-];
-
 function App() {
   const [game, setGame] = useState<GameState>();
   const [yourPlayerId, setYourPlayerId] = useState<PlayerId | undefined>();
   const [money, setMoney] = useState<number>(100); // Initial money
-  const [painting, setPainting] = useState<string[][]>(
-    Array(4).fill(Array(4).fill("#FFFFFF"))
-  );
-  const [selectedColor, setSelectedColor] = useState<string>("#000000");
   const [showEditor, setShowEditor] = useState<boolean>(false);
 
   useEffect(() => {
@@ -49,17 +32,11 @@ function App() {
   }
 
   const handlePaintButtonClick = () => {
-    // Toggle the editor visibility
-    setShowEditor(!showEditor);
+    setShowEditor(true);
   };
 
-  const handleCellClick = (row: number, col: number) => {
-    const newPainting = painting.map((r, rowIndex) =>
-      r.map((cell, colIndex) =>
-        rowIndex === row && colIndex === col ? selectedColor : cell
-      )
-    );
-    setPainting(newPainting);
+  const handleSave = () => {
+    setShowEditor(false);
   };
 
   return (
@@ -68,8 +45,8 @@ function App() {
         <MoneyDisplay money={money} />
       </header>
       <main className="App-main">
-        <PaintButton onClick={handlePaintButtonClick} />
-        {showEditor && <Editor />}
+        {!showEditor && <PaintButton onClick={handlePaintButtonClick} />}
+        {showEditor && <Editor onSave={handleSave} />}
       </main>
     </div>
   );
