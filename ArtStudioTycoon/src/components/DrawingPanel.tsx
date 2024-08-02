@@ -10,9 +10,10 @@ interface DrawingPanelProps {
   selectedColor: string;
   onSave: () => void;
   imageColors: string[];
+  imageUrl: string;
 }
 
-const DrawingPanel: React.FC<DrawingPanelProps> = ({ width, height, selectedColor, onSave, imageColors }) => {
+const DrawingPanel: React.FC<DrawingPanelProps> = ({ width, height, selectedColor, onSave, imageColors, imageUrl}) => {
   const panelRef = useRef<HTMLDivElement>(null);
   const [rows, setRows] = useState<JSX.Element[]>([]);
 
@@ -24,19 +25,30 @@ const DrawingPanel: React.FC<DrawingPanelProps> = ({ width, height, selectedColo
     }
   }, [width, height, imageColors]);
 
-  const loadImagePixels = () => {
-    const colors = imageColors.slice(0, width * height);
-    const pixelRows: string[][] = [];
-
-    for (let y = 0; y < height; y++) {
-      const row: string[] = [];
-      for (let x = 0; x < width; x++) {
-        row.push(colors[y * width + x] || "rgba(0,0,0,0)");
+    const loadImagePixels = () => {
+    const img = new Image();
+    img.src = imageUrl;
+    img.onload = () => {
+      const canvas = document.createElement("canvas");
+      canvas.width = img.width;
+      canvas.height = img.height;
+      const ctx = canvas.getContext("2d");
+      ctx?.drawImage(img, 0, 0);
+      const imageData = ctx?.getImageData(0, 0, img.width, img.height);
+      if (imageData) {
+        const colors: string[][] = [];
+        for (let y = 0; y < img.height; y++) {
+          const row: string[] = [];
+          for (let x = 0; x < img.width; x++) {
+            const index = (y * img.width + x) * 4;
+            const color = `rgba(${imageData.data[index]}, ${imageData.data[index + 1]}, ${imageData.data[index + 2]}, ${imageData.data[index + 3] / 255})`;
+            row.push(color);
+          }
+          colors.push(row);
+        }
+        setRows(colors.map((row, i) => <Row key={i} width={width} selectedColor={selectedColor} initialColors={row} />));
       }
-      pixelRows.push(row);
-    }
-
-    setRows(pixelRows.map((row, i) => <Row key={i} width={width} selectedColor={selectedColor} initialColors={row} />));
+    };
   };
 
   const createEmptyGrid = () => {
@@ -48,9 +60,6 @@ const DrawingPanel: React.FC<DrawingPanelProps> = ({ width, height, selectedColo
       <div id="pixels" ref={panelRef}>
         {rows}
       </div>
-      <button onClick={() => exportComponentAsPNG(panelRef)} className="button">
-        Export as PNG
-      </button>
       <button onClick={onSave} className="button">
         Save
       </button>

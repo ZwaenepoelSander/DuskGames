@@ -17,6 +17,7 @@ export default function Editor({ onSave }: EditorProps) {
   const [buttonText, setButtonText] = useState("Start Drawing");
   const [selectedColor, setColor] = useState("#f44336");
   const [imageColors, setImageColors] = useState<string[]>([]);
+  const [imageUrl, setImageUrl] = useState<string>(image); // State to store the image URL
 
   useEffect(() => {
     if (panelSize === 16) {
@@ -49,7 +50,7 @@ export default function Editor({ onSave }: EditorProps) {
 
   return (
     <div id="editor">
-      <h1>Pixel Editor</h1>
+      <h1>Paint Canvas</h1>
       {hideDrawingPanel && <h2>Select Panel Size</h2>}
       {hideDrawingPanel && (
         <div id="options">
@@ -87,6 +88,7 @@ export default function Editor({ onSave }: EditorProps) {
           selectedColor={selectedColor}
           onSave={onSave}
           imageColors={imageColors}
+          imageUrl={imageUrl} // Pass the image URL to DrawingPanel
         />
       )}
     </div>
