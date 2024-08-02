@@ -1,14 +1,35 @@
+// App.tsx
 import { PlayerId } from "dusk-games-sdk/multiplayer"
 import { useEffect, useState } from "react"
-
+import PaintingGrid from "./components/PaintingGrid"
+import ColorPicker from "./components/ColorPicker"
+import MoneyDisplay from "./components/MoneyDisplay"
+import PaintButton from "./components/PaintButton"
 import selectSoundAudio from "./assets/select.wav"
-import { GameState } from "./logic.ts"
+import { GameState } from "./logic"
 
+// Create an audio object for the select sound
 const selectSound = new Audio(selectSoundAudio)
+
+const colors = [
+  "#FF0000",
+  "#00FF00",
+  "#0000FF",
+  "#FFFF00",
+  "#FF00FF",
+  "#00FFFF",
+  "#000000",
+  "#FFFFFF",
+]
 
 function App() {
   const [game, setGame] = useState<GameState>()
   const [yourPlayerId, setYourPlayerId] = useState<PlayerId | undefined>()
+  const [money, setMoney] = useState<number>(100) // Initial money
+  const [painting, setPainting] = useState<string[][]>(
+    Array(4).fill(Array(4).fill("#FFFFFF"))
+  )
+  const [selectedColor, setSelectedColor] = useState<string>("#000000")
 
   useEffect(() => {
     Dusk.initClient({
@@ -23,65 +44,40 @@ function App() {
 
   if (!game) {
     // Dusk only shows your game after an onChange() so no need for loading screen
-    return
+    return null
   }
 
-  const { winCombo, cells, lastMovePlayerId, playerIds, freeCells } = game
+  const handlePaintButtonClick = () => {
+    // Handle the paint button click logic here
+    console.log("Paint button clicked!")
+    // Example of increasing money on button click
+    setMoney(money + 10)
+  }
+
+  const handleCellClick = (row: number, col: number) => {
+    const newPainting = painting.map((r, rowIndex) =>
+      r.map((cell, colIndex) =>
+        rowIndex === row && colIndex === col ? selectedColor : cell
+      )
+    )
+    setPainting(newPainting)
+  }
 
   return (
-    <>
-      <div id="board" className={!lastMovePlayerId ? "initial" : ""}>
-        {cells.map((cell, cellIndex) => {
-          const cellValue = cells[cellIndex]
-
-          return (
-            <button
-              key={cellIndex}
-              onClick={() => Dusk.actions.claimCell(cellIndex)}
-              data-player={(cellValue !== null
-                ? playerIds.indexOf(cellValue)
-                : -1
-              ).toString()}
-              data-dim={String(
-                (winCombo && !winCombo.includes(cellIndex)) ||
-                  (!freeCells && !winCombo)
-              )}
-              {...(cells[cellIndex] ||
-              lastMovePlayerId === yourPlayerId ||
-              winCombo
-                ? { "data-disabled": "" }
-                : {})}
-            />
-          )
-        })}
-      </div>
-      <ul id="playersSection">
-        {playerIds.map((playerId, index) => {
-          const player = Dusk.getPlayerInfo(playerId)
-
-          return (
-            <li
-              key={playerId}
-              data-player={index.toString()}
-              data-your-turn={String(
-                playerIds[index] !== lastMovePlayerId && !winCombo && freeCells
-              )}
-            >
-              <img src={player.avatarUrl} />
-              <span>
-                {player.displayName}
-                {player.playerId === yourPlayerId && (
-                  <span>
-                    <br />
-                    (You)
-                  </span>
-                )}
-              </span>
-            </li>
-          )
-        })}
-      </ul>
-    </>
+    <div className="main">
+      <header className="App-header">
+        <MoneyDisplay money={money} />
+      </header>
+      <main className="App-main">
+        <PaintButton onClick={handlePaintButtonClick} />
+        {/* <PaintingGrid painting={painting} onCellClick={handleCellClick} />
+        <ColorPicker
+          colors={colors}
+          selectedColor={selectedColor}
+          onColorSelect={setSelectedColor}
+        /> */}
+      </main>
+    </div>
   )
 }
 
