@@ -170,7 +170,7 @@ button:not([data-disabled]) {
 
 ul {
   list-style: none;
-  font-size: min(14px, 3vw);
+  /* font-size: min(12px, 1vw); */
   padding: 0;
   font-weight: bold;
   display: flex;
@@ -216,4 +216,98 @@ li[data-player="0"]:before {
 
 li[data-player="1"]:before {
   background-image: url(./assets/o.svg);
+}
+/* Add this CSS to your stylesheet */
+
+.game-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0px;
+  padding: 3vw;
+}
+
+.score-options {
+  width: 100%;
+}
+
+.score-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+  gap: 1vw;
+}
+
+.players-section {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 1vw;
+  width: 100%;
+}
+
+.player-column {
+  background-color: #444;
+  padding: 1vw;
+  border-radius: 1vw;
+}
+
+.score-header h2 {
+  margin-bottom: 1vw;
+}
+
+/* New CSS for the scorecard and dice */
+
+.scorecard {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 0px 0;
+}
+
+.scorecard th,
+.scorecard td {
+  border: 1px solid #666;
+  padding: 2vw;
+  text-align: center;
+}
+
+.scorecard th {
+  background-color: #555;
+  color: #fff;
+}
+
+.scorecard td {
+  background-color: #333;
+  color: #e6e6e6;
+}
+
+.dice-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1px;
+  margin-top: 2px;
+  flex-wrap: wrap;
+}
+
+.dice-container img {
+  width: 15vw;
+  height: 15vw;
+  max-height: 15vw;
+  max-width: 15vw;
+  height: auto;
+}
+
+.dice-container button {
+  width: 100%;
+  height: 10vh;
+  font-size: 1.2rem;
+  background-color: #555;
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  margin-top: 0px;
+}
+
+.dice-container button:hover {
+  background-color: #666;
 }
