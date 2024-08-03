@@ -6,7 +6,7 @@ interface MoneyDisplayProps {
 }
 
 const MoneyDisplay: React.FC<MoneyDisplayProps> = ({ money }) => {
-  return <div className="money-display">Money: ${money}</div>
+  return <div className="money-display">TEST</div>
 }
 
 export default MoneyDisplay

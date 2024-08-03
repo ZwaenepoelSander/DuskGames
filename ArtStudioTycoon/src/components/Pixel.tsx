@@ -1,41 +1,25 @@
+// Pixel.tsx
 import React, { useState } from "react";
 import "../styles/pixel.scss";
 
 interface PixelProps {
+  initialColor: string;
   selectedColor: string;
-  initialColor: string; // Add initialColor prop
 }
 
-const Pixel: React.FC<PixelProps> = ({ selectedColor, initialColor }) => {
-  const [pixelColor, setPixelColor] = useState(initialColor);
-  const [oldColor, setOldColor] = useState(pixelColor);
-  const [canChangeColor, setCanChangeColor] = useState(true);
+const Pixel: React.FC<PixelProps> = ({ initialColor, selectedColor }) => {
+  const [color, setColor] = useState<string>(initialColor);
 
-  function applyColor() {
-    setPixelColor(selectedColor);
-    setCanChangeColor(false);
-  }
-
-  function changeColorOnHover() {
-    setOldColor(pixelColor);
-    setPixelColor(selectedColor);
-  }
-
-  function resetColor() {
-    if (canChangeColor) {
-      setPixelColor(oldColor);
-    }
-    setCanChangeColor(true);
-  }
+  const handleClick = () => {
+    setColor(selectedColor);
+  };
 
   return (
     <div
       className="pixel"
-      onClick={applyColor}
-      onMouseEnter={changeColorOnHover}
-      onMouseLeave={resetColor}
-      style={{ backgroundColor: pixelColor }}
-    ></div>
+      style={{ backgroundColor: color }}
+      onClick={handleClick}
+    />
   );
 };
 

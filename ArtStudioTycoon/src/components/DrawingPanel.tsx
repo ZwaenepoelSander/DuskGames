@@ -13,7 +13,14 @@ interface DrawingPanelProps {
   imageUrl: string;
 }
 
-const DrawingPanel: React.FC<DrawingPanelProps> = ({ width, height, selectedColor, onSave, imageColors, imageUrl}) => {
+const DrawingPanel: React.FC<DrawingPanelProps> = ({
+  width,
+  height,
+  selectedColor,
+  onSave,
+  imageColors,
+  imageUrl,
+}) => {
   const panelRef = useRef<HTMLDivElement>(null);
   const [rows, setRows] = useState<JSX.Element[]>([]);
 
@@ -23,9 +30,9 @@ const DrawingPanel: React.FC<DrawingPanelProps> = ({ width, height, selectedColo
     } else {
       createEmptyGrid();
     }
-  }, [width, height, imageColors]);
+  }, [width, height, imageColors, selectedColor]);
 
-    const loadImagePixels = () => {
+  const loadImagePixels = () => {
     const img = new Image();
     img.src = imageUrl;
     img.onload = () => {
@@ -52,7 +59,18 @@ const DrawingPanel: React.FC<DrawingPanelProps> = ({ width, height, selectedColo
   };
 
   const createEmptyGrid = () => {
-    setRows(Array(height).fill(null).map((_, i) => <Row key={i} width={width} selectedColor={selectedColor} initialColors={Array(width).fill("#fff")} />));
+    setRows(
+      Array(height)
+        .fill(null)
+        .map((_, i) => (
+          <Row
+            key={i}
+            width={width}
+            selectedColor={selectedColor}
+            initialColors={Array(width).fill("#fff")}
+          />
+        ))
+    );
   };
 
   return (
@@ -60,6 +78,9 @@ const DrawingPanel: React.FC<DrawingPanelProps> = ({ width, height, selectedColo
       <div id="pixels" ref={panelRef}>
         {rows}
       </div>
+      <button onClick={() => exportComponentAsPNG(panelRef)} className="button">
+        Export as PNG
+      </button>
       <button onClick={onSave} className="button">
         Save
       </button>
