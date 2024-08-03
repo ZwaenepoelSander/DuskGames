@@ -5,6 +5,7 @@ import { CirclePicker } from "react-color";
 import DrawingPanel from "./DrawingPanel";
 import { extractColors } from 'extract-colors';
 import image from "../assets/16x16/necklace_01c.png";
+import { hexToRgba } from "../utils";
 
 interface EditorProps {
   onSave: () => void;
@@ -85,9 +86,9 @@ export default function Editor({ onSave }: EditorProps) {
         <DrawingPanel
           width={panelSize}
           height={panelSize}
-          selectedColor={selectedColor}
+          selectedColor={hexToRgba(selectedColor)}
           onSave={onSave}
-          imageColors={imageColors}
+          imageColors={imageColors.map(color => hexToRgba(color))}
           imageUrl={imageUrl} // Pass the image URL to DrawingPanel
         />
       )}

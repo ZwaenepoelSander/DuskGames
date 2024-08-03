@@ -3,6 +3,7 @@ import React, { useRef, useEffect, useState } from "react";
 import "../styles/drawingPanel.scss";
 import Row from "./Row";
 import { exportComponentAsPNG } from "react-component-export-image";
+import { hexToRgba } from "../utils";
 
 interface DrawingPanelProps {
   width: number;
@@ -30,7 +31,7 @@ const DrawingPanel: React.FC<DrawingPanelProps> = ({
     } else {
       createEmptyGrid();
     }
-  }, [width, height, imageColors, selectedColor]);
+  }, [width, height, imageColors]);
 
   const loadImagePixels = () => {
     const img = new Image();
@@ -67,7 +68,7 @@ const DrawingPanel: React.FC<DrawingPanelProps> = ({
             key={i}
             width={width}
             selectedColor={selectedColor}
-            initialColors={Array(width).fill("#fff")}
+            initialColors={Array(width).fill(hexToRgba("#ffffff", 0.2))}
           />
         ))
     );
