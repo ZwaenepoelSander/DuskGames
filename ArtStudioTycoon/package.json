@@ -11,7 +11,7 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "dusk-games-sdk": "^4.21.2",
+    "dusk-games-sdk": "^4.21.13",
     "extract-colors": "^4.0.6",
     "get-image-colors": "^4.0.1",
     "react": "^18.2.0",
