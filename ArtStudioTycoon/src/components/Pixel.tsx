@@ -1,5 +1,4 @@
-// Pixel.tsx
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import "../styles/pixel.scss";
 import { hexToRgba } from "../utils";
 
@@ -14,6 +13,8 @@ const Pixel: React.FC<PixelProps> = ({ initialColor, selectedColor }) => {
 
   const handleClick = () => {
     const selectedRgba = hexToRgba(selectedColor);
+    console.log(selectedRgba)
+    console.log(initialColor)
     if (!isLocked && selectedRgba === initialColor) {
       setColor(selectedColor);
       setIsLocked(true);

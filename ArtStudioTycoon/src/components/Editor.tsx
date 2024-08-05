@@ -1,4 +1,3 @@
-// Editor.tsx
 import React, { useState, useEffect } from "react";
 import "../styles/editor.scss";
 import { CirclePicker } from "react-color";
@@ -86,7 +85,7 @@ export default function Editor({ onSave }: EditorProps) {
         <DrawingPanel
           width={panelSize}
           height={panelSize}
-          selectedColor={hexToRgba(selectedColor)}
+          selectedColor={selectedColor}  // Pass the hex color directly
           onSave={onSave}
           imageColors={imageColors.map(color => hexToRgba(color))}
           imageUrl={imageUrl} // Pass the image URL to DrawingPanel

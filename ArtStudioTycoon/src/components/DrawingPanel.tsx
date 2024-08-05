@@ -1,4 +1,3 @@
-// DrawingPanel.tsx
 import React, { useRef, useEffect, useState } from "react";
 import "../styles/drawingPanel.scss";
 import Row from "./Row";
