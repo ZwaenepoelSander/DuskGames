@@ -25,15 +25,34 @@ export default function Editor({ onSave }: EditorProps) {
     }
   }, [panelSize]);
 
-  const loadSpriteColors = async (imageSrc: string) => {
-    try {
-      const colors = await extractColors(imageSrc);
-      const hexColors = colors.map(color => color.hex);
+const loadSpriteColors = (imageSrc: string) => {
+  const img = new Image();
+  img.src = imageSrc;
+  img.onload = () => {
+    const canvas = document.createElement("canvas");
+    canvas.width = img.width;
+    canvas.height = img.height;
+    const ctx = canvas.getContext("2d");
+    ctx?.drawImage(img, 0, 0);
+    const imageData = ctx?.getImageData(0, 0, img.width, img.height);
+    if (imageData) {
+      const uniqueColors = new Set<string>();
+      for (let i = 0; i < imageData.data.length; i += 4) {
+        const r = imageData.data[i];
+        const g = imageData.data[i + 1];
+        const b = imageData.data[i + 2];
+        const a = imageData.data[i + 3] / 255;
+        uniqueColors.add(`rgba(${r}, ${g}, ${b}, ${a})`);
+      }
+      const hexColors = Array.from(uniqueColors);
       setImageColors(hexColors);
-    } catch (error) {
-      console.error("Error extracting colors:", error);
+      console.log(hexColors);
     }
   };
+  img.onerror = (error) => {
+    console.error("Error loading image:", error);
+  };
+};
 
   function initializeDrawingPanel() {
     setHideOptions(!hideOptions);
